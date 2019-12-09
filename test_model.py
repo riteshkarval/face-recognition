@@ -37,7 +37,7 @@ def read_image(filename, byteorder='>'):
                             ).reshape((int(height), int(width)))
 
 
-n_of_persons = 40
+n_of_persons = 35
 def get_person(size, total_sample_size, p_id):
     image = read_image('att-database-of-faces/s' + str(1) + '/' + str(1) + '.pgm', 'rw+')
     image = image[::size, ::size]
@@ -61,7 +61,7 @@ X = []
 for i in range(n_of_persons):
     X.append(get_person(size,10,i))
 
-p_id = np.random.randint(36,40)
+p_id = np.random.randint(40)
 p_imgs = get_person(size,10,p_id)
 st = 0
 for i in range(n_of_persons):
