@@ -31,15 +31,12 @@ def read_image(filename, byteorder='>'):
 
 img = read_image('att-database-of-faces/s1/1.pgm')
 
-size = 2
 total_sample_size = 10000
 n_of_persons = 40
 
-def get_data(size, total_sample_size):
+def get_data(total_sample_size):
     #read the image
     image = read_image('att-database-of-faces/s' + str(1) + '/' + str(1) + '.pgm', 'rw+')
-    #reduce the size
-    image = image[::size, ::size]
     #get the new size
     dim1 = image.shape[0]
     dim2 = image.shape[1]
@@ -63,10 +60,6 @@ def get_data(size, total_sample_size):
             # read the two images
             img1 = read_image('att-database-of-faces/s' + str(i+1) + '/' + str(ind1 + 1) + '.pgm', 'rw+')
             img2 = read_image('att-database-of-faces/s' + str(i+1) + '/' + str(ind2 + 1) + '.pgm', 'rw+')
-            
-            #reduce the size
-            img1 = img1[::size, ::size]
-            img2 = img2[::size, ::size]
             
             #store the images to the initialized numpy array
             x_geuine_pair[count, 0, 0, :, :] = img1
@@ -93,9 +86,6 @@ def get_data(size, total_sample_size):
             img1 = read_image('att-database-of-faces/s' + str(ind1+1) + '/' + str(j + 1) + '.pgm', 'rw+')
             img2 = read_image('att-database-of-faces/s' + str(ind2+1) + '/' + str(j + 1) + '.pgm', 'rw+')
 
-            img1 = img1[::size, ::size]
-            img2 = img2[::size, ::size]
-
             x_imposite_pair[count, 0, 0, :, :] = img1
             x_imposite_pair[count, 1, 0, :, :] = img2
             #as we are drawing images from the different directory we assign label as 0. (imposite pair)
@@ -109,7 +99,7 @@ def get_data(size, total_sample_size):
     return X, Y
 
 
-X, Y = get_data(size, total_sample_size)
+X, Y = get_data(total_sample_size)
 # Next, we split our data for training and testing with 75% training and 25% testing proportions:
 
 x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=.25)
@@ -166,7 +156,7 @@ def eucl_dist_output_shape(shapes):
 distance = Lambda(euclidean_distance, output_shape=eucl_dist_output_shape)([feat_vecs_a, feat_vecs_b])
 
 
-epochs = 13
+epochs = 5
 rms = RMSprop()
 
 
@@ -188,11 +178,4 @@ img2 = x_train[:, 1]
 model.fit([img_1, img2], y_train, validation_split=.25,
           batch_size=128, verbose=1, nb_epoch=epochs)
 
-pred = model.predict([x_test[:, 0], x_test[:, 1]])
-
-def compute_accuracy(predictions, labels):
-    return labels[predictions.ravel() < 0.5].mean()
-
-# Finally, we check our model accuracy. 
-
-compute_accuracy(pred, y_test)
+model.save('face_model.h5')
