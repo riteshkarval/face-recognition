@@ -38,16 +38,14 @@ def read_image(filename, byteorder='>'):
 
 
 n_of_persons = 35
-def get_person(size, total_sample_size, p_id):
+def get_person(total_sample_size, p_id):
     image = read_image('att-database-of-faces/s' + str(1) + '/' + str(1) + '.pgm', 'rw+')
-    image = image[::size, ::size]
     dim1 = image.shape[0]
     dim2 = image.shape[1]
     p_imgs = np.zeros([total_sample_size, 1, dim1, dim2]) 
     count = 0    
     for j in range(10):
         img1 = read_image('att-database-of-faces/s' + str(p_id+1) + '/' + str(j + 1) + '.pgm', 'rw+')
-        img1 = img1[::size, ::size]
         p_imgs[count, 0, :, :] = img1
         count += 1
     return p_imgs/255
@@ -55,21 +53,26 @@ def get_person(size, total_sample_size, p_id):
 
 model = load_model('face_model.h5', custom_objects={'contrastive_loss': contrastive_loss})
 
-
-size = 2
 X = []
 for i in range(n_of_persons):
-    X.append(get_person(size,10,i))
+    X.append(get_person(10,i))
+
+# Picking random person image for test
 
 p_id = np.random.randint(40)
-p_imgs = get_person(size,10,p_id)
+img_id = np.random.randint(10)
+image = read_image('att-database-of-faces/s' + str(p_id+1) + '/' + str(img_id + 1) + '.pgm', 'rw+')
+p_imgs = np.zeros([10, 1, image.shape[0], image.shape[1]])  
+for i in range(10):
+    p_imgs[i, 0, :, :] = image/255
 st = 0
 for i in range(n_of_persons):
     pred = model.predict([X[i], p_imgs]).ravel() < 0.2
-    if Counter(pred)[True] >8:
+    if Counter(pred)[True] >9:
         print("Member")
+        print(Counter(pred))
         print(i+1, p_id+1)
-        st = 1
         exit(0)
-        
 print("Not a member")
+print(p_id+1)
+print(Counter(pred))
