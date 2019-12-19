@@ -45,4 +45,4 @@ def d3pipeline(
 
 if __name__ == '__main__':
   import kfp.compiler as compiler
-  compiler.Compiler().compile(d3pipeline, __file__ + '.tar.gz')
+  compiler.Compiler().compile(d3pipeline, 'face_detection.tar.gz')
