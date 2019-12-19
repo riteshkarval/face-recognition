@@ -47,9 +47,9 @@ inputs:
      description: 'Optional. Whether to use GDRDMA for distributed training.'}
   - {name: access_url,      type: String,   optional: true,     default: '',
      description: 'Optional. URL at which dkube is accessible, copy paste from the browser of this window. Required for cloud deployments.'}
-# outputs:
-#   - {name: rundetails,      description: 'Details of the dkube run'}
-#   - {name: artifact,        description: 'Identifier in Dkube storage where artifacts of training are stored.'}
+outputs:
+  - {name: rundetails,      description: 'Details of the dkube run'}
+  - {name: artifact,        description: 'Identifier in Dkube storage where artifacts of training are stored.'}
 implementation:
   container:
     image: ocdr/dkubepl:1.4.2
@@ -72,6 +72,6 @@ implementation:
       --gdrdma, {inputValue: gdrdma},
       --runid, '{{pod.name}}'
     ]
-   #  fileOutputs:
-   #    rundetails:   /tmp/rundetails
-   #    artifact:     /tmp/artifact
+    fileOutputs:
+      rundetails:   /tmp/rundetails
+      artifact:     /tmp/artifact

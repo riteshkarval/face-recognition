@@ -13,9 +13,8 @@ from tensorflow.io import gfile
 DATA_DIR = os.getenv('DKUBE_INPUT_DATASETS', None)
 MODEL_DIR = os.getenv('DKUBE_JOB_OUTPUT_S3', None)
 
-with gfile.GFile(MODEL_DIR+"/tst.txt", 'wb') as f:
+with gfile.GFile(MODEL_DIR+"tst.txt", 'wb') as f:
     f.write("hello")
-
 
 def read_image(filename, byteorder='>'):
     
@@ -44,7 +43,7 @@ n_of_persons = 40
 
 def get_data(total_sample_size):
     #read the image
-    image = read_image(DATA_DIR + '/s' + str(1) + '/' + str(1) + '.pgm', 'rw+')
+    image = read_image('att-database-of-faces/s' + str(1) + '/' + str(1) + '.pgm', 'rw+')
     #get the new size
     dim1 = image.shape[0]
     dim2 = image.shape[1]
@@ -66,8 +65,8 @@ def get_data(total_sample_size):
                 ind2 = np.random.randint(10)
             
             # read the two images
-            img1 = read_image(DATA_DIR + '/s' + str(i+1) + '/' + str(ind1 + 1) + '.pgm', 'rw+')
-            img2 = read_image(DATA_DIR + '/s' + str(i+1) + '/' + str(ind2 + 1) + '.pgm', 'rw+')
+            img1 = read_image('att-database-of-faces/s' + str(i+1) + '/' + str(ind1 + 1) + '.pgm', 'rw+')
+            img2 = read_image('att-database-of-faces/s' + str(i+1) + '/' + str(ind2 + 1) + '.pgm', 'rw+')
             
             #store the images to the initialized numpy array
             x_geuine_pair[count, 0, 0, :, :] = img1
@@ -91,8 +90,8 @@ def get_data(total_sample_size):
                 if ind1 != ind2:
                     break
                     
-            img1 = read_image(DATA_DIR + '/s' + str(ind1+1) + '/' + str(j + 1) + '.pgm', 'rw+')
-            img2 = read_image(DATA_DIR + '/s' + str(ind2+1) + '/' + str(j + 1) + '.pgm', 'rw+')
+            img1 = read_image('att-database-of-faces/s' + str(ind1+1) + '/' + str(j + 1) + '.pgm', 'rw+')
+            img2 = read_image('att-database-of-faces/s' + str(ind2+1) + '/' + str(j + 1) + '.pgm', 'rw+')
 
             x_imposite_pair[count, 0, 0, :, :] = img1
             x_imposite_pair[count, 1, 0, :, :] = img2
@@ -154,7 +153,10 @@ feat_vecs_b = base_network(img_b)
 def euclidean_distance(vects):
     x, y = vects
     return K.sqrt(K.sum(K.square(x - y), axis=1, keepdims=True))
-MODEL_DIR = os.getenv('DKUBE_JOB_OUTPUT_S3', None)= shapes
+
+
+def eucl_dist_output_shape(shapes):
+    shape1, shape2 = shapes
     return (shape1[0], 1)
 
 
@@ -183,6 +185,5 @@ img2 = x_train[:, 1]
 model.fit([img_1, img2], y_train, validation_split=.25,
           batch_size=128, verbose=1, nb_epoch=epochs)
 
+#model.save('face_model.h5')
 print("Completed")
-
-# model.save('face_model.h5')
