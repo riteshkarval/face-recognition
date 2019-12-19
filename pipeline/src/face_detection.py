@@ -27,7 +27,7 @@ def d3pipeline(
     #Input datasets for training. Update accordingly if different name is used while creating dataset in dkube.    
     training_datasets=json.dumps(["faces"]),
     #Request gpus as needed. Val 0 means no gpu, then training_container=docker.io/ocdr/dkube-datascience-tf-cpu:v1.12.
-    training_gpus=1,
+    training_gpus=0,
     #Any envs to be passed to the training program
     training_envs=json.dumps([{"steps": 100}]),
     serving_device='cpu'):
@@ -40,7 +40,7 @@ def d3pipeline(
                                     envs=training_envs)
     # serving     = dkube_serving_op(auth_token, train.outputs['artifact']).after(train)
     # inference   = dkube_viewer_op(auth_token, serving.outputs['servingurl'], 
-    #                               'catsdogs', viewtype='inference').after(serving)
+    #                               'facedetection', viewtype='inference').after(serving)
 
 
 if __name__ == '__main__':

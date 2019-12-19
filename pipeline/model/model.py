@@ -8,8 +8,14 @@ from keras.layers import Activation
 from keras.layers import Input, Lambda, Dense, Dropout, Convolution2D, MaxPooling2D, Flatten
 from keras.models import Sequential, Model
 from keras.optimizers import RMSprop
+from tensorflow.io import gfile
 
 DATA_DIR = os.getenv('DKUBE_INPUT_DATASETS', None)
+MODEL_DIR = os.getenv('DKUBE_JOB_OUTPUT_S3', None)
+
+with gfile.GFile(MODEL_DIR+"/tst.txt", 'wb') as f:
+    f.write("hello")
+
 
 def read_image(filename, byteorder='>'):
     
@@ -148,10 +154,7 @@ feat_vecs_b = base_network(img_b)
 def euclidean_distance(vects):
     x, y = vects
     return K.sqrt(K.sum(K.square(x - y), axis=1, keepdims=True))
-
-
-def eucl_dist_output_shape(shapes):
-    shape1, shape2 = shapes
+MODEL_DIR = os.getenv('DKUBE_JOB_OUTPUT_S3', None)= shapes
     return (shape1[0], 1)
 
 
