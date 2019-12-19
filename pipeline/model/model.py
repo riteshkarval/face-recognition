@@ -163,7 +163,7 @@ def eucl_dist_output_shape(shapes):
 distance = Lambda(euclidean_distance, output_shape=eucl_dist_output_shape)([feat_vecs_a, feat_vecs_b])
 
 
-epochs = 5
+epochs = 1
 rms = RMSprop()
 
 
