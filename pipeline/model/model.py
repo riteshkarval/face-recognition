@@ -9,6 +9,8 @@ from keras.layers import Input, Lambda, Dense, Dropout, Convolution2D, MaxPoolin
 from keras.models import Sequential, Model
 from keras.optimizers import RMSprop
 
+DATA_DIR = os.getenv('DKUBE_INPUT_DATASETS', None)
+
 def read_image(filename, byteorder='>'):
     
     #first we read the image, as a raw file to the buffer
@@ -36,7 +38,7 @@ n_of_persons = 40
 
 def get_data(total_sample_size):
     #read the image
-    image = read_image('att-database-of-faces/s' + str(1) + '/' + str(1) + '.pgm', 'rw+')
+    image = read_image(DATA_DIR + '/s' + str(1) + '/' + str(1) + '.pgm', 'rw+')
     #get the new size
     dim1 = image.shape[0]
     dim2 = image.shape[1]
@@ -58,8 +60,8 @@ def get_data(total_sample_size):
                 ind2 = np.random.randint(10)
             
             # read the two images
-            img1 = read_image('att-database-of-faces/s' + str(i+1) + '/' + str(ind1 + 1) + '.pgm', 'rw+')
-            img2 = read_image('att-database-of-faces/s' + str(i+1) + '/' + str(ind2 + 1) + '.pgm', 'rw+')
+            img1 = read_image(DATA_DIR + '/s' + str(i+1) + '/' + str(ind1 + 1) + '.pgm', 'rw+')
+            img2 = read_image(DATA_DIR + '/s' + str(i+1) + '/' + str(ind2 + 1) + '.pgm', 'rw+')
             
             #store the images to the initialized numpy array
             x_geuine_pair[count, 0, 0, :, :] = img1
@@ -83,8 +85,8 @@ def get_data(total_sample_size):
                 if ind1 != ind2:
                     break
                     
-            img1 = read_image('att-database-of-faces/s' + str(ind1+1) + '/' + str(j + 1) + '.pgm', 'rw+')
-            img2 = read_image('att-database-of-faces/s' + str(ind2+1) + '/' + str(j + 1) + '.pgm', 'rw+')
+            img1 = read_image(DATA_DIR + '/s' + str(ind1+1) + '/' + str(j + 1) + '.pgm', 'rw+')
+            img2 = read_image(DATA_DIR + '/s' + str(ind2+1) + '/' + str(j + 1) + '.pgm', 'rw+')
 
             x_imposite_pair[count, 0, 0, :, :] = img1
             x_imposite_pair[count, 1, 0, :, :] = img2
