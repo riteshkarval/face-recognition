@@ -21,11 +21,11 @@ def d3pipeline(
     #For custom private images, please input username/password 
     training_container=json.dumps({'image':'docker.io/ocdr/dkube-datascience-tf-cpu:v1.14', 'username':'', 'password': ''}),
     #Name of the workspace in dkube. Update accordingly if different name is used while creating a workspace in dkube.
-    training_program="face_detection",
+    training_program="facedetection",
     #Script to run inside the training container
     training_script="python model.py",
     #Input datasets for training. Update accordingly if different name is used while creating dataset in dkube.    
-    training_datasets=json.dumps(["face_detection"]),
+    training_datasets=json.dumps(["faces"]),
     #Request gpus as needed. Val 0 means no gpu, then training_container=docker.io/ocdr/dkube-datascience-tf-cpu:v1.12.
     training_gpus=1,
     #Any envs to be passed to the training program
