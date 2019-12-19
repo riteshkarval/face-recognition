@@ -183,4 +183,6 @@ img2 = x_train[:, 1]
 model.fit([img_1, img2], y_train, validation_split=.25,
           batch_size=128, verbose=1, nb_epoch=epochs)
 
+print("Completed")
+
 # model.save('face_model.h5')
